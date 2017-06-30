@@ -15,11 +15,11 @@ class PatientsController extends AppController
     {
         $q=$_POST['q'];
         $con=$this->conexion();
-        $res=mysql_query("select * from career where faculty_id=".$q."",$con);
+        $res=mysql_query("select * from careers where faculty_id=".$q."",$con);
         ?>
         </br>
         <label>* Carrera</label>
-        <select id="career" name="career" class="form-control">
+        <select id="career" name="career_id" class="form-control">
         <option value="">Seleccione</option>
         <?php while($fila=mysql_fetch_array($res)){ ?>
         <option value="<?php echo $fila['id']; ?>"><?php echo $fila['name']; ?></option>
@@ -33,17 +33,15 @@ class PatientsController extends AppController
 
     public function conexion()
     {
-         $con = mysql_connect("localhost","root","supermetroidgt8");
+        $con = mysql_connect("localhost","root","supermetroidgt8");
+        if (!$con)
+        {
+            die('Could not connect: ' . mysql_error());
+        }
+        mysql_select_db("clinica", $con);
 
- if (!$con){
-
-  die('Could not connect: ' . mysql_error());
- }
-
- mysql_select_db("clinica", $con);
-
- return($con);
- $this->autoRender = false;
+        return($con);
+        $this->autoRender = false;
     }
 
     public function isAuthorized($user)
@@ -153,7 +151,9 @@ class PatientsController extends AppController
 
     public function view($id)
     {
-        $patient = $this->Patients->get($id);
+        $patient = $this->Patients->get($id, [
+            'contain' => ['Careers', 'Faculties']
+        ]);
         $this->set('patient', $patient);
 
 //Imprimir el PDF

@@ -13,8 +13,8 @@ use Cake\ORM\Entity;
  * @property int $age
  * @property string $gender
  * @property string $income
- * @property string $faculty
- * @property string $career
+ * @property string $faculty_id
+ * @property string $career_id
  * @property string $marital_status
  * @property string $occupation
  * @property string $department
@@ -24,6 +24,20 @@ use Cake\ORM\Entity;
  * @property float $money
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
+ *
+ * @property \App\Model\Entity\Faculty $faculty
+ * @property \App\Model\Entity\Career $career
+ * @property \App\Model\Entity\Addiction[] $addictions
+ * @property \App\Model\Entity\Allergy[] $allergys
+ * @property \App\Model\Entity\Eathabit[] $eathabits
+ * @property \App\Model\Entity\Immunization[] $immunizations
+ * @property \App\Model\Entity\Inheritance[] $inheritances
+ * @property \App\Model\Entity\Lifestyle[] $lifestyles
+ * @property \App\Model\Entity\Nonpathological[] $nonpathologicals
+ * @property \App\Model\Entity\Obstetric[] $obstetrics
+ * @property \App\Model\Entity\Pathological[] $pathologicals
+ * @property \App\Model\Entity\Pstres[] $pstress
+ * @property \App\Model\Entity\Symptom[] $symptoms
  */
 class Patient extends Entity
 {

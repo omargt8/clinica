@@ -43,11 +43,19 @@
             </tr>
             <tr>
 			<td>Facultad</td>
-			<td><?= $patient->faculty ?></td>
+			<td>
+                <?= $patient->has('faculty') ? $this->Html->link($patient->faculty->name,
+                     ['controller' => 'Careers', 'action' => 'view', $patient->faculty->id]) : '' ?>
+                    &nbsp;
+            </td>
             </tr>
             <tr>
 			<td>Carrera</td>
-			<td><?= $patient->career ?></td>
+			<td>
+                <?= $patient->has('career') ? $this->Html->link($patient->career->name,
+                     ['controller' => 'Careers', 'action' => 'view', $patient->career->id]) : '' ?>
+                    &nbsp;
+            </td>
             </tr>
             <tr>
 			<td>Estado Civil</td>

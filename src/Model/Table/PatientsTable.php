@@ -5,10 +5,23 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\ORM\TableRegistry;
 
 /**
  * Patients Model
+ *
+ * @property \Cake\ORM\Association\BelongsTo $Faculties
+ * @property \Cake\ORM\Association\BelongsTo $Careers
+ * @property \Cake\ORM\Association\HasMany $Addictions
+ * @property \Cake\ORM\Association\HasMany $Allergys
+ * @property \Cake\ORM\Association\HasMany $Eathabits
+ * @property \Cake\ORM\Association\HasMany $Immunizations
+ * @property \Cake\ORM\Association\HasMany $Inheritances
+ * @property \Cake\ORM\Association\HasMany $Lifestyles
+ * @property \Cake\ORM\Association\HasMany $Nonpathologicals
+ * @property \Cake\ORM\Association\HasMany $Obstetrics
+ * @property \Cake\ORM\Association\HasMany $Pathologicals
+ * @property \Cake\ORM\Association\HasMany $Pstress
+ * @property \Cake\ORM\Association\HasMany $Symptoms
  *
  * @method \App\Model\Entity\Patient get($primaryKey, $options = [])
  * @method \App\Model\Entity\Patient newEntity($data = null, array $options = [])
@@ -17,6 +30,8 @@ use Cake\ORM\TableRegistry;
  * @method \App\Model\Entity\Patient patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Patient[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Patient findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class PatientsTable extends Table
 {
@@ -37,50 +52,60 @@ class PatientsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        //Relacionando la tabla Patients con la tablas
-        $this->hasOne('Allergys')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Eathabits')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Immunizations')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Inheritances')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Lifestyles')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Nonpathologicals')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Obstetrics')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Pathologicals')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Addictions')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Pstress')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
-        
-        $this->hasOne('Symptoms')
-            ->setDependent(true)
-            ->foreignKey('patient_id');
+        $this->belongsTo('Faculties', [
+            'foreignKey' => 'faculty_id',
+            'setDependent' => 'false',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Careers', [
+            'foreignKey' => 'career_id',
+            'setDependent' => 'false',
+            'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Addictions', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Allergys', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Eathabits', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Immunizations', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Inheritances', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Lifestyles', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Nonpathologicals', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Obstetrics', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Pathologicals', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Pstress', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
+        $this->hasMany('Symptoms', [
+            'foreignKey' => 'patient_id',
+            'setDependent' => 'true'
+        ]);
     }
 
     /**
@@ -91,7 +116,7 @@ class PatientsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator
+       $validator
             ->integer('id')
             ->allowEmpty('id', 'create')
             ->add('id', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
@@ -123,11 +148,11 @@ class PatientsTable extends Table
             ->notEmpty('income', 'Llene este campo');
 
         $validator
-            ->requirePresence('faculty', 'create')
+            ->requirePresence('faculty_id', 'create')
             ->notEmpty('faculty', 'Llene este campo');
 
         $validator
-            ->requirePresence('career', 'create')
+            ->requirePresence('career_id', 'create')
             ->notEmpty('career', 'Llene este campo');
 
         $validator
@@ -178,12 +203,11 @@ class PatientsTable extends Table
         return $rules;
     }
 
-    public function findPatients(Query $query, array $options)
+      public function findPatients(Query $query, array $options)
     {
         $patients = $this->find()
         ->select(['id', 'carnet', 'first_name', 'last_name']);
         return $patients->where(['Patients.carnet  IN' => $options['search']]);
         return $patients->group(['Patients.id']);
     }
-
 }

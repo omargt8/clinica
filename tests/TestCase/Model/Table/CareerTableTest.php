@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\PatientsTable;
+use App\Model\Table\CareerTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\PatientsTable Test Case
+ * App\Model\Table\CareerTable Test Case
  */
-class PatientsTableTest extends TestCase
+class CareerTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\PatientsTable
+     * @var \App\Model\Table\CareerTable
      */
-    public $Patients;
+    public $Career;
 
     /**
      * Fixtures
@@ -24,8 +24,9 @@ class PatientsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.patients',
+        'app.career',
         'app.faculties',
+        'app.patients',
         'app.careers',
         'app.addictions',
         'app.allergys',
@@ -49,8 +50,8 @@ class PatientsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Patients') ? [] : ['className' => 'App\Model\Table\PatientsTable'];
-        $this->Patients = TableRegistry::get('Patients', $config);
+        $config = TableRegistry::exists('Career') ? [] : ['className' => 'App\Model\Table\CareerTable'];
+        $this->Career = TableRegistry::get('Career', $config);
     }
 
     /**
@@ -60,7 +61,7 @@ class PatientsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Patients);
+        unset($this->Career);
 
         parent::tearDown();
     }

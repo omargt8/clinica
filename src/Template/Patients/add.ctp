@@ -406,11 +406,11 @@ function cargarSelect2(valor)
                             
                 // Desde aqui comienza facultad y carrera
                             $con=conexion();
-                            $res=mysql_query("select * from faculty",$con);
+                            $res=mysql_query("select * from faculties",$con);
 
                         ?>
-                            <div>* Facultad</div>
-                            <select id="cont" name="faculty" class="form-control" onchange="myFunction(this.value)">
+                            <label>* Facultad</label>
+                            <select id="cont" name="faculty_id" class="form-control" onchange="myFunction(this.value)">
                             <option value="">Seleccione</option>
                         <?php
                             while($fila=mysql_fetch_array($res)){
@@ -420,7 +420,14 @@ function cargarSelect2(valor)
                             }
                         ?>
                             </select>
-                            <div id="myDiv"></div><!--div donde aparecen las carreras-->
+                        <div id="myDiv">
+                            </br>
+                            <label>* Carrera</label>
+                            <select id="career" name="career_id" class="form-control">
+                            <option value="">Seleccione</option>
+                            </select>
+                            </br>
+                        </div><!--div donde aparecen las carreras-->
                         <?php
                 // Aqui termina
                         ?>
