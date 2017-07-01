@@ -21,7 +21,7 @@ use Cake\ORM\Entity;
  * @property string $town
  * @property bool $children
  * @property string $transport
- * @property float $money
+ * @property string $money
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  *

@@ -44,7 +44,7 @@
                     <?php if(isset($current_user['role']) and $current_user['role'] === 'admin') : ?>
                     <?= $this->Html->link('Editar', ['action' => 'preedit', $patient->id], ['class' => 'btn btn-sm btn-default']) ?>
                     <?= $this->Form->postLink('Borrar', ['action' => 'delete', $patient->id], ['confirm' =>
-                    'Eliminar Usuario?', 'class' => 'btn btn-sm btn-danger']) ?>
+                    'Eliminar Paciente?', 'class' => 'btn btn-sm btn-danger']) ?>
                     <?php else : ?>
                     <?= $this->Html->link('Editar', ['action' => 'index'], ['class' => 'btn btn-sm btn-default disabled']) ?>
                     <?= $this->Html->link('Borrar', ['action' => 'index'], ['class' => 'btn btn-sm btn-danger disabled']) ?>

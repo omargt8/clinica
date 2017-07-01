@@ -181,7 +181,6 @@ class PatientsTable extends Table
             ->notEmpty('transport', 'Llene este campo');
 
         $validator
-            ->numeric('money')
             ->requirePresence('money', 'create')
             ->notEmpty('money', 'Llene este campo');
 

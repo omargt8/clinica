@@ -17,10 +17,9 @@ class PatientsController extends AppController
         $con=$this->conexion();
         $res=mysql_query("select * from careers where faculty_id=".$q."",$con);
         ?>
-        </br>
         <label>* Carrera</label>
-        <select id="career" name="career_id" class="form-control">
-        <option value="">Seleccione</option>
+        <select id="career" name="career_id" class="form-control" required>
+        <option value="">(Seleccione)</option>
         <?php while($fila=mysql_fetch_array($res)){ ?>
         <option value="<?php echo $fila['id']; ?>"><?php echo $fila['name']; ?></option>
         <?php } ?>
@@ -128,7 +127,6 @@ class PatientsController extends AppController
     public function add()
     {
         $patient = $this->Patients->newEntity();
-
         if($this->request->is('post'))
         {
             $patient = $this->Patients->patchEntity($patient, $this->request->data);
@@ -142,11 +140,13 @@ class PatientsController extends AppController
             {
                 $this->Flash->error('El paciente no pudo ser creado');
             }
+
             
             
         }
 
-        $this->set(compact('patient'));
+        $faculties = $this->Patients->Faculties->find('list', ['limit' => 200]);
+        $this->set(compact('patient', 'faculties'));
     }   
 
     public function view($id)
