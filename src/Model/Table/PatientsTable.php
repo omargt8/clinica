@@ -63,49 +63,60 @@ class PatientsTable extends Table
             'joinType' => 'INNER'
         ]);
         $this->hasMany('Addictions', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+        
+
         $this->hasMany('Allergys', [
             'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Eathabits', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Immunizations', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Inheritances', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Lifestyles', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Nonpathologicals', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Obstetrics', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Pathologicals', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Pstress', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
+
         $this->hasMany('Symptoms', [
-            'foreignKey' => 'patient_id',
-            'setDependent' => 'true'
-        ]);
+            'foreignKey' => 'patient_id'
+        ])
+            ->setDependent(true);
     }
 
     /**

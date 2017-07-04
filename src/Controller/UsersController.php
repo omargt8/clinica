@@ -21,7 +21,7 @@ class UsersController extends AppController
     {
         if(isset($user['role']) and $user['role'] === 'views')
         {
-            if(in_array($this->request->action, ['home', 'logout', 'view', 'edit']))
+            if(in_array($this->request->action, ['home', 'logout', 'view']))
             {
                 return true;
             }
@@ -79,6 +79,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id);
+        $user->active = true;
 
         if($this->request->is(['patch', 'post', 'put']))
         {
@@ -106,11 +107,12 @@ class UsersController extends AppController
         if($this->request->is('post'))
         {
             $user = $this->Users->patchEntity($user, $this->request->data);
+            $user->active = true;
 
             if($this->Users->save($user))
             {
                 $this->Flash->success('El usuario ha sido creado correctamente');
-                return $this->redirect(['controller' => 'Users', 'action' => 'logout']);
+                return $this->redirect(['controller' => 'Users', 'action' => 'add']);
             }
             else
             {
@@ -146,6 +148,9 @@ class UsersController extends AppController
             ->where(['role' => 'views'])
             ->execute();
             $this->Flash->success('Los Usuarios han sido bloqueados!');
+
+        $this->autoRender = false;
+        return $this->redirect(['controller' => 'Patients' ,'action' => 'menu']);
     }
     
     public function unblock()
@@ -156,5 +161,8 @@ class UsersController extends AppController
             ->where(['role' => 'views'])
             ->execute();
             $this->Flash->success('Los Usuarios han sido habilitados!');
+
+        $this->autoRender = false;
+        return $this->redirect(['controller' => 'Patients' ,'action' => 'menu']);
     }
 }

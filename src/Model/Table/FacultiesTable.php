@@ -7,9 +7,9 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Faculty Model
+ * Faculties Model
  *
- * @property \Cake\ORM\Association\HasMany $Career
+ * @property \Cake\ORM\Association\HasMany $Careers
  * @property \Cake\ORM\Association\HasMany $Patients
  *
  * @method \App\Model\Entity\Faculty get($primaryKey, $options = [])
@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Faculty[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Faculty findOrCreate($search, callable $callback = null, $options = [])
  */
-class FacultyTable extends Table
+class FacultiesTable extends Table
 {
 
     /**
@@ -33,13 +33,15 @@ class FacultyTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('faculty');
+        $this->setTable('faculties');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('Career', [
+        $this->hasMany('Careers', [
             'foreignKey' => 'faculty_id'
-        ]);
+        ])
+        ->setDependent(true);
+        
         $this->hasMany('Patients', [
             'foreignKey' => 'faculty_id'
         ]);
@@ -59,7 +61,7 @@ class FacultyTable extends Table
 
         $validator
             ->requirePresence('name', 'create')
-            ->notEmpty('name');
+            ->notEmpty('name', 'Por favor llene este campo');
 
         return $validator;
     }

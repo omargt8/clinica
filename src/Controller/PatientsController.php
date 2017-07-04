@@ -274,4 +274,9 @@ class PatientsController extends AppController
         $this->set('pstres', $pstres);
         $this->set('symptom', $symptom);
     }
+
+    public function menu()
+    {
+        return;
+    }
 }

@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Clinica USAM';
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,8 +21,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
+        <?= $cakeDescription ?>
     </title>
     <?= $this->Html->meta('icon') ?>
 
@@ -85,14 +84,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     </a>
                 </li>
 
-                  <li class="has-subnav">
-                    <a href="/clinica/users/edit/<?= $current_user['id'] ?>">
-                        <i class="fa fa-medkit fa-2x"></i>
-                        <span class="nav-text">
-                            Editar mi Perfil
-                        </span>
-                    </a>
-                </li>
+                <?php if(isset($current_user['role']) and $current_user['role'] === 'admin'): ?>
+                    <li class="has-subnav">
+                        <a href="/clinica/users/edit/<?= $current_user['id'] ?>">
+                            <i class="fa fa-medkit fa-2x"></i>
+                            <span class="nav-text">
+                                Editar mi Perfil
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
 
             <?php if(isset($current_user['role']) and $current_user['role'] === 'admin'): ?>
                 <li>
@@ -129,7 +130,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
             <?php if(isset($current_user['role']) and $current_user['role'] === 'admin'): ?>
                 <li>
-                   <a href="/clinica/zoonosis/index">
+                   <a href="/clinica/patients/menu">
                         <i class="fa fa-cog fa-2x"></i>
                         <span class="nav-text">
                             Configuración Avanzada

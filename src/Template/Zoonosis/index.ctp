@@ -2,11 +2,8 @@
     <div class="col-md-12">
         <div class="page-header">
             <h2>Administración de  Zoonosis</h2>
-                <?= $this->Html->link('Crear Nueva', ['action' => 'add'], ['class' => 'btn btn-sm btn-success']) ?>
-                <?= $this->Html->link('Actualizar Antiguo Ingreso', ['controller' => 'Patients', 'action' => 'update'], ['class' => 'btn btn-sm btn-success']) ?>
-                <?= $this->Html->link('Deshabilitar Usuarios', ['controller' => 'Users', 'action' => 'block'], ['class' => 'btn btn-sm btn-warning']) ?>
-                <?= $this->Html->link('Habilitar Usuarios', ['controller' => 'Users', 'action' => 'unblock'], ['class' => 'btn btn-sm btn-success']) ?>
-            <?= $this->Flash->render() ?>
+                <?= $this->Flash->render() ?>
+                <?= $this->Html->link('Crear Nueva', ['action' => 'add'], ['class' => 'btn btn-sm btn-success']) ?>               
         </div>
 
         <div class="table-responsive">

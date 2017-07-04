@@ -7,7 +7,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Career Model
+ * Careers Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Faculties
  * @property \Cake\ORM\Association\HasMany $Patients
@@ -20,7 +20,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Career[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Career findOrCreate($search, callable $callback = null, $options = [])
  */
-class CareerTable extends Table
+class CareersTable extends Table
 {
 
     /**
@@ -33,7 +33,7 @@ class CareerTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('career');
+        $this->setTable('careers');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
@@ -42,8 +42,7 @@ class CareerTable extends Table
             'joinType' => 'INNER'
         ]);
         $this->hasMany('Patients', [
-            'foreignKey' => 'career_id',
-            'setDependent' => 'false'
+            'foreignKey' => 'career_id'
         ]);
     }
 
@@ -61,7 +60,7 @@ class CareerTable extends Table
 
         $validator
             ->requirePresence('name', 'create')
-            ->notEmpty('name');
+            ->notEmpty('name', 'Este campo no puede ser dejado vacio');
 
         return $validator;
     }

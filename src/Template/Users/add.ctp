@@ -34,7 +34,6 @@ function soloLetras(e) {
                 echo $this->Form->input('password', ['label' => 'Contraseña']);
                 echo $this->Form->input('role', ['options' => ['admin' =>
                 'Administrador', 'views' => 'Vistas'], 'label' => 'Rol']);
-                echo $this->Form->input('active', ['label' => 'Activo']);
             ?>
         </fieldset>
         <?= $this->Form->button('Crear', ['class' => 'btn btn-primary btn-lg btn-block']) ?>

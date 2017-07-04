@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $name
  *
- * @property \App\Model\Entity\Career[] $career
+ * @property \App\Model\Entity\Career[] $careers
  * @property \App\Model\Entity\Patient[] $patients
  */
 class Faculty extends Entity
