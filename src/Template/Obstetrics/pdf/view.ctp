@@ -25,7 +25,11 @@
             </tr>
             <tr>
 			<td>F.U.M</td>
-			<td><?= $obstetric->fum->nice() ?></td>
+			<td>
+            <?php if($obstetric->fum != NULL): ?>
+            <?= $obstetric->fum->nice() ?>
+            <?php endif; ?>
+            </td>
             </tr>
             <tr>
 			<td>Hijos</td>
@@ -37,11 +41,19 @@
             </tr>
             <tr>
 			<td>F.P.P</td>
-			<td><?= $obstetric->fpp->nice() ?></td>
+			<td>
+            <?php if($obstetric->fpp != NULL): ?>
+            <?= $obstetric->fpp->nice() ?>
+            <?php endif; ?>
+            </td>
             </tr>
             <tr>
 			<td>F.U.P</td>
-			<td><?= $obstetric->fup->nice() ?></td>
+			<td>
+            <?php if($obstetric->fup != NULL): ?>
+            <?= $obstetric->fup->nice() ?>
+             <?php endif; ?>
+            </td>
             </tr>
             <tr>
 			<td>Embarazada</td>

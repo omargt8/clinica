@@ -28,7 +28,11 @@
 
             <dt>Genero:</dt>
             <dd>
-                <?= $patient->gender ?>
+                <?php if($patient->gender == 'male'): ?>
+                    Masculino
+                <?php else: ?>
+                    Femenino
+                <?php endif; ?>
                 &nbsp;
             </dd>
             <br>

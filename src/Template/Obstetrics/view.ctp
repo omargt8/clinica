@@ -24,10 +24,12 @@
                 <br>
 
                 <dt>F.U.M:</dt>
+                <?php if($obstetric->fum != NULL): ?>
                 <dd>
                     <?= $obstetric->fum->nice() ?>
                     &nbsp;
                 </dd>
+                <?php endif; ?>
                 <br>
 
                 <dt>Hijos:</dt>
@@ -45,17 +47,21 @@
                 <br>
 
                 <dt>F.P.P:</dt>
+                <?php if($obstetric->fpp != NULL): ?>
                 <dd>
                     <?= $obstetric->fpp->nice() ?>
                     &nbsp;
                 </dd>
+                <?php endif; ?>
                 <br>
 
                 <dt>F.U.P:</dt>
+                <?php if($obstetric->fup != NULL): ?>
                 <dd>
                     <?= $obstetric->fup->nice() ?>
                     &nbsp;
                 </dd>
+                <?php endif; ?>
                 <br>
 
                 <dt>Embarazada:</dt>

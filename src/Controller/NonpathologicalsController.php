@@ -67,6 +67,19 @@ class NonpathologicalsController extends AppController
     {
         $nonpathological = $this->Nonpathologicals->newEntity();
 
+        $nonpathologicals = $this->Nonpathologicals;
+
+        $query = $nonpathologicals->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         //Para obtener el id que se esta mandando al momento de guardar
         $patient = $this->Nonpathologicals->Patients->get($id);
         //Para guardar el id del paciente como llave foranea en esta tabla
@@ -84,6 +97,35 @@ class NonpathologicalsController extends AppController
                 {
                     $this->Flash->success('Los datos no patológicos han sido guardados!');
                     return $this->redirect(['controller' => 'Pathologicals', 'action' => 'add', $patient->id]);
+                }
+               
+            }
+            $this->Flash->error('Algo salió mal, intente de nuevo por favor');
+        }
+        $this->set(compact('nonpathological', 'patients', 'search'));
+        $this->set('_serialize', ['nonpathological']);
+    }
+    public function add2($id)
+    {
+        $nonpathological = $this->Nonpathologicals->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Nonpathologicals->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $nonpathological->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $nonpathological = $this->Nonpathologicals->patchEntity($nonpathological, $this->request->getData());
+            if ($this->Nonpathologicals->save($nonpathological)) {
+                if($patient->gender == 'female')
+                {
+                    $this->Flash->success('Los datos no patológicos han sido guardados!');
+                    return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
+                }
+                else
+                {
+                    $this->Flash->success('Los datos no patológicos han sido guardados!');
+                    return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
                 }
                
             }
@@ -119,6 +161,7 @@ class NonpathologicalsController extends AppController
         $this->set(compact('nonpathological', 'patients'));
         $this->set('_serialize', ['nonpathological']);
     }
+    
 
     /**
      * Delete method

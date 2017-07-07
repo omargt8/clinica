@@ -20,7 +20,6 @@ $('#fup').datepicker('option', { dateFormat: 'yy-mm-dd', changeMonth: true, chan
 </script>
 
 
-
 <div class = "row">
     <div class = "col-md-6 col-md-offset-3">
         <div class = "page-header">
@@ -45,7 +44,7 @@ $('#fup').datepicker('option', { dateFormat: 'yy-mm-dd', changeMonth: true, chan
               <?php
                   echo $this->Form->input('cantchildren', ['options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5',
                 '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'], 'label' => 'Cantidad de hijos', 'empty' => '(Seleccione)']);
-                ?>
+            ?>
                 <label for="">F.P.P (Fecha Primer Parto)</label>
                 <input type="text" id="fpp" name="fpp" readonly = readonly class="form-control">
                 <label for="">F.U.P (Fecha Último Parto)</label>

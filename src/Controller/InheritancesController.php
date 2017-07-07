@@ -67,6 +67,19 @@ class InheritancesController extends AppController
     {
         $inheritance = $this->Inheritances->newEntity();
 
+        $inheritances = $this->Inheritances;
+
+        $query = $inheritances->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         //Para obtener el id que se esta mandando al momento de guardar
         $patient = $this->Inheritances->Patients->get($id);
         //Para guardar el id del paciente como llave foranea en esta tabla
@@ -74,10 +87,39 @@ class InheritancesController extends AppController
 
         if ($this->request->is('post')) {
             $inheritance = $this->Inheritances->patchEntity($inheritance, $this->request->getData());
+            if($inheritance->cancer == false)
+            {
+                $inheritance->typecancer = '------';
+            }
             if ($this->Inheritances->save($inheritance)) {
                 $this->Flash->success('Las enfermedades hereditarias han sido llenadas con éxito!');
 
                 return $this->redirect(['controller' => 'Lifestyles', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('Algo salió mal, intente de nuevo por favor');
+        }
+        $this->set(compact('inheritance', 'patients', 'search'));
+        $this->set('_serialize', ['inheritance']);
+    }
+    public function add2($id)
+    {
+        $inheritance = $this->Inheritances->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Inheritances->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $inheritance->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $inheritance = $this->Inheritances->patchEntity($inheritance, $this->request->getData());
+            if($inheritance->cancer == false)
+            {
+                $inheritance->typecancer = '------';
+            }
+            if ($this->Inheritances->save($inheritance)) {
+                $this->Flash->success('Las enfermedades hereditarias han sido llenadas con éxito!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('Algo salió mal, intente de nuevo por favor');
         }
@@ -100,6 +142,10 @@ class InheritancesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $inheritance = $this->Inheritances->patchEntity($inheritance, $this->request->getData());
+            if($inheritance->cancer == false)
+            {
+                $inheritance->typecancer = '------';
+            }
             if ($this->Inheritances->save($inheritance)) {
                 $this->Flash->success('Los datos han sido modificados');
 
@@ -111,6 +157,7 @@ class InheritancesController extends AppController
         $this->set(compact('inheritance', 'patients'));
         $this->set('_serialize', ['inheritance']);
     }
+    
 
     /**
      * Delete method

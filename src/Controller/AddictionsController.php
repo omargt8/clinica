@@ -66,8 +66,41 @@ class AddictionsController extends AppController
     public function add($id)
     {
         $addiction = $this->Addictions->newEntity();
+
+        $addictions = $this->Addictions;
+
+        $query = $addictions->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         if ($this->request->is('post')) {
             $addiction = $this->Addictions->patchEntity($addiction, $this->request->getData());
+            if($addiction->smoking == false)
+            {
+               $addiction->quantityconsumed1 = '-----';
+               $addiction->quantityconsumed2 = '----';
+               $addiction->timeinhalnicotine = '---------';
+            }
+            if($addiction->alcoholism == false)
+            {
+                $addiction->timeintake = '-------';
+                $addiction->quantity = '-------';
+            }
+            if($addiction->drugaddiction == false)
+            {
+                $addiction->type = '-------';
+            }
+            if($addiction->violence == false)
+            {
+                $addiction->typeviolence = '-------';
+            }
 
             //Para obtener el id que se esta mandando al momento de guardar
             $patient = $this->Addictions->Patients->get($id);
@@ -80,6 +113,48 @@ class AddictionsController extends AppController
                 $this->Flash->success('Las adicciones han sido guardadas!');
 
                 return $this->redirect(['controller' => 'Pstress', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('No se pudieron guardar las adicciones, por favor intente nuevamente');
+        }
+        $this->set(compact('addiction', 'patients', 'search'));
+        $this->set('_serialize', ['addiction']);
+    }
+    public function add2($id)
+    {
+        $addiction = $this->Addictions->newEntity();
+        if ($this->request->is('post')) {
+            $addiction = $this->Addictions->patchEntity($addiction, $this->request->getData());
+            if($addiction->smoking == false)
+            {
+               $addiction->quantityconsumed1 = '-----';
+               $addiction->quantityconsumed2 = '----';
+               $addiction->timeinhalnicotine = '---------';
+            }
+            if($addiction->alcoholism == false)
+            {
+                $addiction->timeintake = '-------';
+                $addiction->quantity = '-------';
+            }
+            if($addiction->drugaddiction == false)
+            {
+                $addiction->type = '-------';
+            }
+            if($addiction->violence == false)
+            {
+                $addiction->typeviolence = '-------';
+            }
+
+            //Para obtener el id que se esta mandando al momento de guardar
+            $patient = $this->Addictions->Patients->get($id);
+            //Para guardar el id del paciente como llave foranea en esta tabla
+            $addiction->patient_id = $patient->id;
+
+            $addiction->quantityconsumed = $addiction->quantityconsumed1 . ' ' . $addiction->quantityconsumed2;
+
+            if ($this->Addictions->save($addiction)) {
+                $this->Flash->success('Las adicciones han sido guardadas!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('No se pudieron guardar las adicciones, por favor intente nuevamente');
         }
@@ -102,6 +177,25 @@ class AddictionsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $addiction = $this->Addictions->patchEntity($addiction, $this->request->getData());
+            if($addiction->smoking == false)
+            {
+               $addiction->quantityconsumed1 = '-----';
+               $addiction->quantityconsumed2 = '----';
+               $addiction->timeinhalnicotine = '---------';
+            }
+            if($addiction->alcoholism == false)
+            {
+                $addiction->timeintake = '-------';
+                $addiction->quantity = '-------';
+            }
+            if($addiction->drugaddiction == false)
+            {
+                $addiction->type = '-------';
+            }
+            if($addiction->violence == false)
+            {
+                $addiction->typeviolence = '-------';
+            }
 
             $addiction->quantityconsumed = $addiction->quantityconsumed1 . ' ' . $addiction->quantityconsumed2;
 
@@ -116,7 +210,7 @@ class AddictionsController extends AppController
         $this->set(compact('addiction', 'patients'));
         $this->set('_serialize', ['addiction']);
     }
-
+   
     /**
      * Delete method
      *

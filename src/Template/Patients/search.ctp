@@ -1,10 +1,30 @@
+<script>
+    function busc(e)
+    {
+        tecla = (document.all) ? e.keyCode : e.which;
+
+        //Tecla de retroceso para borrar, siempre la permite
+        if (tecla==8){
+            return true;
+        }
+        // Enter
+        if (tecla==13){
+            return true;
+        }
+        
+        // Patron de entrada, en este caso solo acepta numeros
+        patron =/[0-9]/;
+        tecla_final = String.fromCharCode(tecla);
+        return patron.test(tecla_final);
+    }
+</script>
 <h1> Buscar Paciente </h1>
 <br>
 <div class="row">
     <?php echo $this->Form->create('Patients', array('type' => 'GET')); ?>
     
     <div class="col-sm-4">
-        <?php echo $this->Form->input('search', array('label' => false, 'div' => false, 'autocomplet' => 'off')); ?>
+        <?php echo $this->Form->input('search', array('label' => false, 'maxlength' => '6', 'div' => false, 'autocomplet' => 'off', 'onkeypress' => 'return busc(event)')); ?>
     </div>
 
     <div class="col-sm-3">
@@ -28,8 +48,6 @@
                     <th><?= $this->Paginator->sort('carnet', ['Carnet']) ?></th>
                     <th><?= $this->Paginator->sort('first_name', ['Nombre']) ?></th>
                     <th><?= $this->Paginator->sort('last_name', ['Apellidos']) ?></th>
-                    <th><?= $this->Paginator->sort('faculty', ['Facultad']) ?></th>
-                    <th><?= $this->Paginator->sort('career', ['Carrera']) ?></th>
                     <th><?= $this->Paginator->sort('age', ['Edad']) ?></th>
                     <th><?= $this->Paginator->sort('income', ['Ingreso']) ?></th>
                     <th>Acciones</th>
@@ -46,8 +64,6 @@
                     <td>------------</td>
                     <td>------------</td>
                     <?php endif; ?>
-                    <td><?= h($patient->faculty) ?></td>
-                    <td><?= h($patient->career) ?></td>
                     <td><?= h($patient->age) ?></td>
                     <td><?= h($patient->income) ?></td>
                     <td>

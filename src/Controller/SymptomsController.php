@@ -67,6 +67,19 @@ class SymptomsController extends AppController
     {
         $symptom = $this->Symptoms->newEntity();
 
+        $symptoms = $this->Symptoms;
+
+        $query = $symptoms->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
             //Para obtener el id que se esta mandando al momento de guardar
             $patient = $this->Symptoms->Patients->get($id);
             //Para guardar el id del paciente como llave foranea en esta tabla
@@ -79,6 +92,28 @@ class SymptomsController extends AppController
                 $this->Flash->success('Los sintomas han sido guardados!');
 
                 return $this->redirect(['controller' => 'Patients', 'action' => 'index']);
+            }
+            $this->Flash->error('Los sintomas no se guardaron, por favor intente de nuevo');
+        }
+        $this->set(compact('symptom', 'patients', 'search'));
+        $this->set('_serialize', ['symptom']);
+    }
+    public function add2($id)
+    {
+        $symptom = $this->Symptoms->newEntity();
+
+            //Para obtener el id que se esta mandando al momento de guardar
+            $patient = $this->Symptoms->Patients->get($id);
+            //Para guardar el id del paciente como llave foranea en esta tabla
+            $symptom->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $symptom = $this->Symptoms->patchEntity($symptom, $this->request->getData());
+            
+            if ($this->Symptoms->save($symptom)) {
+                $this->Flash->success('Los sintomas han sido guardados!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('Los sintomas no se guardaron, por favor intente de nuevo');
         }
@@ -116,6 +151,7 @@ class SymptomsController extends AppController
         $this->set(compact('symptom', 'patients'));
         $this->set('_serialize', ['symptom']);
     }
+    
 
     /**
      * Delete method

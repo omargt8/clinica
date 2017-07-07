@@ -68,17 +68,73 @@ class EathabitsController extends AppController
     {
         $eathabit = $this->Eathabits->newEntity();
 
+        $eathabits = $this->Eathabits;
+
+        $query = $eathabits->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         //Para obtener el id que se esta mandando al momento de guardar
         $patient = $this->Eathabits->Patients->get($id);
         //Para guardar el id del paciente como llave foranea en esta tabla
         $eathabit->patient_id = $patient->id;
 
-        if ($this->request->is('post')) {
-            $eathabit = $this->Eathabits->patchEntity($eathabit, $this->request->getData());
-            if ($this->Eathabits->save($eathabit)) {
-                $this->Flash->success('El apartado habitos alimenticios ha sido llenado exitosamente!');
 
+        if ($this->request->is('post'))
+         {
+            $eathabit = $this->Eathabits->patchEntity($eathabit, $this->request->getData());
+            if($eathabit->vegetables == false)
+            {
+                $eathabit->amountvegetables = '--------';
+            }
+            if($eathabit->fruits == false)
+            {
+                $eathabit->amountfruit = '--------';
+            }
+
+            if ($this->Eathabits->save($eathabit))
+            {
+                $this->Flash->success('El apartado habitos alimenticios ha sido llenado exitosamente!');
                 return $this->redirect(['controller' => 'Immunizations', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('No se pudieron guardar los datos intente nuevamente');
+        }
+        $this->set(compact('eathabit', 'patients', 'search'));
+        $this->set('_serialize', ['eathabit']);
+    }
+    public function add2($id)
+    {
+        $eathabit = $this->Eathabits->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Eathabits->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $eathabit->patient_id = $patient->id;
+
+
+        if ($this->request->is('post'))
+         {
+            $eathabit = $this->Eathabits->patchEntity($eathabit, $this->request->getData());
+            if($eathabit->vegetables == false)
+            {
+                $eathabit->amountvegetables = '--------';
+            }
+            if($eathabit->fruits == false)
+            {
+                $eathabit->amountfruit = '--------';
+            }
+
+            if ($this->Eathabits->save($eathabit))
+            {
+                $this->Flash->success('El apartado habitos alimenticios ha sido llenado exitosamente!');
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('No se pudieron guardar los datos intente nuevamente');
         }
@@ -101,6 +157,14 @@ class EathabitsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $eathabit = $this->Eathabits->patchEntity($eathabit, $this->request->getData());
+            if($eathabit->vegetables == false)
+            {
+                $eathabit->amountvegetables = '--------';
+            }
+            if($eathabit->fruits == false)
+            {
+                $eathabit->amountfruit = '--------';
+            }
             if ($this->Eathabits->save($eathabit)) {
                 $this->Flash->success('Los datos alimenticios han sido modificados');
 
@@ -112,6 +176,7 @@ class EathabitsController extends AppController
         $this->set(compact('eathabit', 'patients'));
         $this->set('_serialize', ['eathabit']);
     }
+   
 
     /**
      * Delete method

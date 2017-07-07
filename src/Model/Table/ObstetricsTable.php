@@ -67,10 +67,6 @@ class ObstetricsTable extends Table
             ->requirePresence('menstrualrhit', 'create')
             ->notEmpty('menstrualrhit');
 
-        $validator
-            ->date('fum')
-            ->requirePresence('fum', 'create')
-            ->notEmpty('fum');
 
         $validator
             ->boolean('children')

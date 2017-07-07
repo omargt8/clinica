@@ -1,4 +1,22 @@
+
+<?= $this->Html->script(['ajax']) ?>
+
 <script type="text/javascript">
+
+/**
+*Funcion para trabajar con las carreras por Ajax
+*/
+function myFunction(str)
+{
+loadDoc("q="+str,"procphp",function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+    }
+  });
+}
+
 /**
  * Funcion que se ejecuta al seleccionar una opcion del primer select
  */
@@ -44,7 +62,7 @@ function cargarSelect2(valor)
      *  - hace referencia al value del primer select. Es para saber que valores
      *  mostrar una vez se haya seleccionado una opcion del primer select
      *  - value que se asignara
-     *  - testo que se asignara
+     *  - texto que se asignara
      */
     var arrayValores=new Array(
         // http://www.elsalvadormipais.com/municipios-de-el-salvador-por-departamentos
@@ -335,7 +353,7 @@ function cargarSelect2(valor)
         document.getElementById("select2").options.length=0;
  
         // añadimos los nuevos valores al select2
-        document.getElementById("select2").options[0]=new Option("(Seleccione)", "0");
+        document.getElementById("select2").options[0]=new Option("(Seleccione)", "");
         for(i=0;i<arrayValores.length;i++)
         {
             // unicamente añadimos las opciones que pertenecen al id seleccionado
@@ -351,51 +369,6 @@ function cargarSelect2(valor)
     }
 }
  
-function cargarSelect4(valor)
-{
-    var arrayCarreras = new Array(
-        new Array('Ciencias Empresariales',"Licenciatura en Administracion de Empresas","Licenciatura en Administracion de Empresas"),
-        new Array('Ciencias Empresariales',"Licenciatura en Contaduria Publica","Licenciatura en Contaduria Publica"),
-        new Array('Ciencias Empresariales',"Licenciatura en Comunicaciones","Licenciatura en Comunicaciones"),
-        new Array('Ciencias Empresariales',"Licenciatura en Ciencias de la Computacion","Licenciatura en Ciencias de la Computacion"),
-        new Array('Ciencias Empresariales',"Licenciatura en Mercadeo","Licenciatura en Mercadeo"),
-        new Array('Ciencias Empresariales',"Tecnico en Sistemas de Computacion","Tecnico en Administracion de Empresas"),
-        new Array('Ciencias Empresariales',"Tecnico en Publicidad","Tecnico en Publicidad"),
-        new Array('Ciencias Empresariales',"Tecnico en Mercadeo","Tecnico en Mercadeo"),
-        new Array('Ciencias Empresariales',"Tecnico en Redes de Computacion","Licenciatura en Administracion de Empresas"),
-        new Array('Jurisprudencia',"Licenciatura en Ciencias Juridicas","Licenciatura en Ciencias Juridicas"),
-        new Array('Medicina',"Doctorado en Medicina","Doctorado en Medicina"),
-        new Array('Medicina',"Licenciatura en Enfermeria","Licenciatura en Enfermeria"),
-        new Array('Medicina Veterinaria y Zootecnia',"Licenciatura en Medicina Veterinaria y Zootecnia","Licenciatura en Medicina Veterinaria y Zootecnia"),
-        new Array('Cirugia Dental',"Doctorado en Cirugia Dental","Doctorado en Cirugia Dental"),
-        new Array('Quimica y Farmacia',"Licenciatura en Quimica y Farmacia","Licenciatura en Quimica y Farmacia"),
-    );
-    
-if(valor==0)
-    {
-        // desactivamos el segundo select
-        document.getElementById("select4").disabled=true;
-    }else{
-        // eliminamos todos los posibles valores que contenga el select2
-        document.getElementById("select4").options.length=0;
- 
-        // añadimos los nuevos valores al select2
-        document.getElementById("select4").options[0]=new Option("(Seleccione)", "0");
-        for(i=0;i<arrayCarreras.length;i++)
-        {
-            // unicamente añadimos las opciones que pertenecen al id seleccionado
-            // del primer select
-            if(arrayCarreras[i][0]==valor)
-            {
-                document.getElementById("select4").options[document.getElementById("select4").options.length]=new Option(arrayCarreras[i][2], arrayCarreras[i][1]);
-            }
-        }
- 
-        // habilitamos el segundo select
-        document.getElementById("select4").disabled=false;
-    }
-}
-
 </script>
 <div class = "row">
     <div class = "col-md-6 col-md-offset-3">
@@ -406,7 +379,7 @@ if(valor==0)
     </div>
 
         <div class = "col-md-12">
-            <?= $this->Form->create($patient, ['novalidate']) ?>
+            <?= $this->Form->create($patient, ['validate']) ?>
 
             <div class="row">
 
@@ -424,16 +397,12 @@ if(valor==0)
                              'empty' => '(Seleccione)']);
                             echo $this->Form->input('gender', ['options' => ['male' =>
                             'Masculino', 'female' => 'Femenino'], 'label' => '* Genero', 'empty' => '(Seleccione)']);
+                            echo $this->Form->input('marital_status', ['options' => ['soltero' =>
+                            'Soltero', 'casado' => 'Casado', 'acompañado' => 'Acompañado', 'divorciado' => 'Divorciado',
+                            'viudo' => 'Viudo'], 'label' => '* Estado Familiar', 'empty' => '(Seleccione)']);
+                            echo $this->Form->input('occupation', ['label' => '* Ocupacion', 'onkeypress' => 'return soloLetras(event);']);
                             echo $this->Form->input('income', ['options' => ['nuevo ingreso' =>
-                            'Nuevo ingreso', 'antiguo ingreso' => 'Antiguo ingreso'], 'label' => '* Ingreso', 'empty' => '(Seleccione)']);
-                            echo $this->Form->input('faculty', ['options' => ['Ciencias Empresariales' =>
-                            'Ciencias Empresariales', 'Jurisprudencia' => 'Jurisprudencia', 'Medicina' => 'Medicina',
-                            'Medicina Veterinaria y Zootecnia' => 'Medicina Veterinaria y Zootecnia',
-                            'Cirugia Dental' => 'Cirugia Dental', 'Quimica y Farmacia' => 'Quimica y Farmacia'],
-                            'label' => '* Facultad', 'empty' => '(Seleccione)', 'id' => 'select3', 'onchange' =>
-                            'cargarSelect4(this.value);']);
-                            echo $this->Form->input('career', ['options' => [],
-                            'label' => '* Carrera', 'id' => 'select4', 'disabled' => 'true']);
+                            'Nuevo ingreso', 'antiguo ingreso' => 'Antiguo ingreso'], 'label' => '* Ingreso a la Universidad', 'empty' => '(Seleccione)']);
                         ?>
                     </fieldset>
                 </div>
@@ -442,10 +411,6 @@ if(valor==0)
                 <div class="col-md-6">
                     <fieldset>
                         <?php
-                            echo $this->Form->input('marital_status', ['options' => ['soltero' =>
-                            'Soltero', 'casado' => 'Casado', 'acompañado' => 'Acompañado', 'divorciado' => 'Divorciado',
-                            'viudo' => 'Viudo'], 'label' => '* Estado Familiar', 'empty' => '(Seleccione)']);
-                            echo $this->Form->input('occupation', ['label' => '* Ocupacion', 'onkeypress' => 'return soloLetras(event);']);
                             echo $this->Form->input('department', ['options' => ['Ahuachapan' => 'Ahuachapan', 'Santa Ana' => 'Santa Ana',
                             'Sonsonate' => 'Sonsonate', 'Chalatenango' => 'Chalatenango', 'San Salvador' => 'San Salvador',
                             'La Libertad' => 'La Libertad', 'Cuscatlan' => 'Cuscatlan', 'Cabañas' => 'Cabañas',
@@ -453,12 +418,15 @@ if(valor==0)
                             'San Miguel' => 'San Miguel', 'Morazan' => 'Morazan', 'La union' => 'La union'],
                             'label' => '* Departamento', 'empty' => '(Seleccione)', 'id' => 'select1', 'onchange' => 'cargarSelect2(this.value);']);
                             echo $this->Form->input('town', ['options' => [],
-                            'label' => '* Municipio', 'id' => 'select2',
-                            'disabled' => 'true']);
+                            'label' => '* Municipio', 'id' => 'select2', 'empty' => '(Seleccione)', 'required']);
                             echo $this->Form->input('children', ['options' => ['1' =>
-                            'SI', '0' => 'NO'], 'label' => '* Hijos', 'empty' => '(Seleccione)']);
-                            echo $this->Form->input('transport', ['label' => '* Tipo de Transporte', 'onkeypress' => 'return soloLetras(event);']);
-                            echo $this->Form->input('money', ['label' => '* Dinero Mensual (Dolares EE.UU)', 'type' => 'text', 'onkeypress' => 'return valida(event)']);
+                            'SI', '0' => 'NO'], 'label' => '* Hijos', 'empty' => '(Seleccione)', 'required']);
+                             echo $this->Form->input('transport', ['options' => ['Carro' =>
+                            'Carro', 'Motocicleta' => 'Motocicleta', 'Bus' => 'Bus', 'Microbus' => 'Microbus',
+                            'Taxi' => 'Taxi', 'A pie' => 'A pie'], 'label' => '* Tipo de Transporte Utilizado', 'empty' => '(Seleccione)']);
+                            echo $this->Form->input('money', ['options' => ['1 - 20' =>
+                            '1 - 20', '21 - 40' => '21 - 40', '41 - 60' => '41 - 60', '61 - 80' => '61 - 80',
+                            '81 - 100' => '81 - 100', 'mas de $100' => 'mas de $100'], 'label' => '* Dinero Mensual para la Universidad (Dolares EE.UU)', 'empty' => '(Seleccione)']);
                         ?>
                     </fieldset>
                 </div>

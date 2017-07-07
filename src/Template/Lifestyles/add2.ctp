@@ -1,3 +1,4 @@
+<?= $this->Html->script('hideinput')  ?>    
 
 <div class = "row">
     <div class = "col-md-6 col-md-offset-3">
@@ -10,8 +11,9 @@
         <fieldset>
             <?php
                 echo $this->Form->input('workshop', ['label' => 'Ejercicio']);
-                echo $this->Form->input('sport', ['label' => 'Deportes']);
+                echo $this->Form->input('sport', ['label' => 'Deportes', 'onchange' => 'javascript:showContent()', 'id' => 'active']);
             ?>
+            <div id="content" style="display: none;">
                 <?php
                 echo $this->Form->input('type', ['options' => ['futbol' => 'Futbol', 'basquetbol' => 'Basquetbol',
                  'atletismo' => 'Atletismo', 'caminata' => 'Caminata', 'aerobicos' => 'aeróbicos', 'tenis' => 'Tenis',
@@ -23,8 +25,9 @@
                   '5 dias a la semana' => '5 días a la semana', '6 dias a la semana' => '6 días a la semana',
                   'todos los dias de la semana' => 'Todos los días de la semana'], 'label' => 'Frecuencia', 'empty' => '(Seleccione)']);
                   ?>
+            </div>
         </fieldset>
-        <?= $this->Form->button('Guardar', ['class' => 'btn btn-primary btn-lg btn-block']) ?>
+        <?= $this->Form->button('Crear', ['class' => 'btn btn-primary btn-lg btn-block']) ?>
             <br />
             <br />
         <?= $this->Form->end() ?>

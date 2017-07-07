@@ -44,17 +44,13 @@
             <tr>
 			<td>Facultad</td>
 			<td>
-                <?= $patient->has('faculty') ? $this->Html->link($patient->faculty->name,
-                     ['controller' => 'Careers', 'action' => 'view', $patient->faculty->id]) : '' ?>
-                    &nbsp;
+                <?= $patient->faculty->name ?>
             </td>
             </tr>
             <tr>
 			<td>Carrera</td>
 			<td>
-                <?= $patient->has('career') ? $this->Html->link($patient->career->name,
-                     ['controller' => 'Careers', 'action' => 'view', $patient->career->id]) : '' ?>
-                    &nbsp;            
+                <?= $patient->career->name ?>          
             </td>
             </tr>
             <tr>
@@ -94,6 +90,7 @@
 			<td><?= $patient->modified->nice() ?></td>
             </tr>
             <!--Adicciones-->
+            <?php if($addiction): ?>
             <tr>
 			<td>Fumador</td>
 			<td><?= $addiction->smoking ? 'SI' : 'NO' ?></td>
@@ -146,8 +143,10 @@
 			<td>Tipo de Violencia</td>
 			<td><?= $addiction->typeviolence ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin adicciones-->
             <!--Alergias-->
+            <?php if($allergy): ?>
             <tr>
 			<td>Polen</td>
 			<td><?= $allergy->pollen ? 'SI' : 'NO' ?></td>
@@ -177,7 +176,9 @@
 			<td><?= $allergy->others ?></td>
             </tr>
             <!--Fin Alergias-->
+            <?php endif; ?>
             <!--Eathabits-->
+            <?php if($eathabit): ?>
             <tr>
 			<td>Tiempos de comida</td>
 			<td><?= $eathabit->mealtimes ?></td>
@@ -207,6 +208,7 @@
 			<td>Cantidad de Frutas</td>
 			<td><?= $eathabit->amountfruit ?></td>
             </tr>
+            <tr>
 			<td>Bebidas energéticas</td>
 			<td><?= $eathabit->energydrinks ? 'SI' : 'NO' ?></td>
             </tr>
@@ -214,8 +216,10 @@
 			<td>Tipo de Aceite</td>
 			<td><?= $eathabit->typeoil ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin Eathabits-->
             <!--Immunizations-->
+            <?php if($immunization): ?>
             <tr>
 			<td>Vacunas Completas</td>
 			<td><?= $immunization->vaccines ? 'SI' : 'NO' ?></td>
@@ -245,9 +249,11 @@
 			<td>Protocolo de inyección</td>
 			<td><?= $immunization->injectionprotocol ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin Immunizations-->
             <!--Inheritances-->
-             <tr>
+            <?php if($inheritance): ?>
+            <tr>
 			<td>Hipertensión</td>
 			<td><?= $inheritance->hypertension ? 'SI' : 'NO' ?></td>
             </tr>
@@ -284,9 +290,11 @@
 			<td>Otros</td>
 			<td><?= $inheritance->others ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin Inheritances-->
             <!--Lifestyles-->
-             <tr>
+            <?php if($lifestyle): ?>
+            <tr>
 			<td>Ejercicio</td>
 			<td><?= $lifestyle->workshop ? 'SI' : 'NO' ?></td>
             </tr>
@@ -302,8 +310,10 @@
 			<td>Frecuencia de Deportes</td>
 			<td><?= $lifestyle->frequency ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin Lifestyles-->
             <!--Nonpathologicals-->
+            <?php if($nonpathological): ?>
             <tr>
 			<td>Tipo de agua</td>
 			<td><?= $nonpathological->water ?></td>
@@ -321,7 +331,9 @@
 			<td><?= $nonpathological->ceiling ?></td>
             </tr>
             <!--Fin Nonpathologicals-->
+            <?php endif; ?>
             <?php if($patient->gender == 'female'): ?>
+            <?php if($obstetric): ?>
             <!--Obstetrics-->
             <tr>
 			<td>Menarquía</td>
@@ -331,9 +343,12 @@
 			<td>Ritmo menstrual</td>
 			<td><?= $obstetric->menstrualrhit ? 'SI' : 'NO' ?></td>
             </tr>
-            <tr>
 			<td>F.U.M</td>
-			<td><?= $obstetric->fum->nice() ?></td>
+			<td>
+            <?php if($obstetric->fum != NULL): ?>
+            <?= $obstetric->fum->nice() ?>
+            <?php endif; ?>
+            </td>
             </tr>
             <tr>
 			<td>Hijos</td>
@@ -345,11 +360,19 @@
             </tr>
             <tr>
 			<td>F.P.P</td>
-			<td><?= $obstetric->fpp->nice() ?></td>
+			<td>
+            <?php if($obstetric->fpp != NULL): ?>
+            <?= $obstetric->fpp->nice() ?>
+            <?php endif; ?>
+            </td>
             </tr>
             <tr>
 			<td>F.U.P</td>
-			<td><?= $obstetric->fup->nice() ?></td>
+			<td>
+            <?php if($obstetric->fup != NULL): ?>
+            <?= $obstetric->fup->nice() ?>
+             <?php endif; ?>
+            </td>
             </tr>
             <tr>
 			<td>Embarazada</td>
@@ -360,8 +383,10 @@
 			<td><?= $obstetric->treatment ? 'SI' : 'NO'  ?></td>
             </tr>
             <?php endif; ?>
+            <?php endif; ?>
             <!--Fin Obstetrics-->
             <!--Pathologicals-->
+            <?php if($pathological): ?>
             <tr>
 			<td>Intervención quirúrgica</td>
 			<td><?= $pathological->surgicalinterven ? 'SI' : 'NO' ?></td>
@@ -419,8 +444,10 @@
 			<td>Firma</td>
 			<td><?= $pathological->signature ? 'SI' : 'NO' ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin Pathologicals-->
             <!--Pstress-->
+            <?php if($pstres): ?>
             <tr>
 			<td>Horas de Estudio Diaras</td>
 			<td><?= $pstres->studyhours ?></td>
@@ -445,8 +472,10 @@
 			<td>Unidad de apoyo</td>
 			<td><?= $pstres->supportunit ? 'SI' : 'NO' ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin Pstress-->
             <!--Symptoms-->
+            <?php if($symptom): ?>
             <tr>
 			<td>Astenia</td>
 			<td><?= $symptom->asthenia ? 'SI' : 'NO' ?></td>
@@ -513,6 +542,7 @@
 			<td>Diagnostico</td>
 			<td><?= $symptom->diagnostic ?></td>
             </tr>
+            <?php endif; ?>
             <!--Fin Symptoms-->
 			</tbody>
         </table>

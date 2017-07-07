@@ -81,6 +81,20 @@ public function initialize()
     {
         $pstres = $this->Pstress->newEntity();
 
+
+        $pstress = $this->Pstress;
+
+        $query = $pstress->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
             //Para obtener el id que se esta mandando al momento de guardar
             $patient = $this->Pstress->Patients->get($id);
             //Para guardar el id del paciente como llave foranea en esta tabla
@@ -88,10 +102,57 @@ public function initialize()
 
         if ($this->request->is('post')) {
             $pstres = $this->Pstress->patchEntity($pstres, $this->request->getData());
+            if($pstres->studyhours == 0)
+            {
+                $pstres->studydays = 0;
+            }
+            elseif($pstres->studydays == 0)
+            {
+                $pstres->studyhours = 0;
+            }
+            if($pstres->stress == false)
+            {
+                $pstres->beforeevaluations = false;
+                $pstres->duringevaluations = false;
+            }
             if ($this->Pstress->save($pstres)) {
                 $this->Flash->success('Los datos de stress han sido guardados!');
 
                 return $this->redirect(['controller' => 'Symptoms', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('No se pudo guardar, por favor intente nuevamente');
+        }
+        $this->set(compact('pstres', 'patients', 'search'));
+        $this->set('_serialize', ['pstres']);
+    }
+    public function add2($id)
+    {
+        $pstres = $this->Pstress->newEntity();
+
+            //Para obtener el id que se esta mandando al momento de guardar
+            $patient = $this->Pstress->Patients->get($id);
+            //Para guardar el id del paciente como llave foranea en esta tabla
+            $pstres->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $pstres = $this->Pstress->patchEntity($pstres, $this->request->getData());
+            if($pstres->studyhours == 0)
+            {
+                $pstres->studydays = 0;
+            }
+            elseif($pstres->studydays == 0)
+            {
+                $pstres->studyhours = 0;
+            }
+            if($pstres->stress == false)
+            {
+                $pstres->beforeevaluations = false;
+                $pstres->duringevaluations = false;
+            }
+            if ($this->Pstress->save($pstres)) {
+                $this->Flash->success('Los datos de stress han sido guardados!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('No se pudo guardar, por favor intente nuevamente');
         }
@@ -114,6 +175,19 @@ public function initialize()
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $pstres = $this->Pstress->patchEntity($pstres, $this->request->getData());
+            if($pstres->studyhours == 0)
+            {
+                $pstres->studydays = 0;
+            }
+            elseif($pstres->studydays == 0)
+            {
+                $pstres->studyhours = 0;
+            }
+            if($pstres->stress == false)
+            {
+                $pstres->beforeevaluations = false;
+                $pstres->duringevaluations = false;
+            }
             if ($this->Pstress->save($pstres)) {
                 $this->Flash->success('Los datos han sido modificados');
 
@@ -125,6 +199,7 @@ public function initialize()
         $this->set(compact('pstres', 'patients'));
         $this->set('_serialize', ['pstres']);
     }
+    
 
     /**
      * Delete method

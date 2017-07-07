@@ -74,10 +74,52 @@ class ObstetricsController extends AppController
 
         if ($this->request->is('post')) {
             $obstetric = $this->Obstetrics->patchEntity($obstetric, $this->request->getData());
+            if($obstetric->children == false)
+            {
+                $obstetric->cantchildren = 0;
+                $obstetric->fpp = NULL;
+                $obstetric->fup = NULL;
+            }
+            if($obstetric->pregnant == false)
+            {
+                $obstetric->treatment = false;
+            }
             if ($this->Obstetrics->save($obstetric)) {
                 $this->Flash->success('Los datos obstetricos han sido guardados!');
 
                 return $this->redirect(['controller' => 'Pathologicals', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('No se pudieron guardar los dato obstetricos, por favor intente de nuevo');
+        }
+        $patients = $this->Obstetrics->Patients->find('list', ['limit' => 200]);
+        $this->set(compact('obstetric', 'patients'));
+        $this->set('_serialize', ['obstetric']);
+    }
+    public function add2($id)
+    {
+        $obstetric = $this->Obstetrics->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Obstetrics->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $obstetric->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $obstetric = $this->Obstetrics->patchEntity($obstetric, $this->request->getData());
+            if($obstetric->children == false)
+            {
+                $obstetric->cantchildren = 0;
+                $obstetric->fpp = NULL;
+                $obstetric->fup = NULL;
+            }
+            if($obstetric->pregnant == false)
+            {
+                $obstetric->treatment = false;
+            }
+            if ($this->Obstetrics->save($obstetric)) {
+                $this->Flash->success('Los datos obstetricos han sido guardados!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('No se pudieron guardar los dato obstetricos, por favor intente de nuevo');
         }
@@ -111,6 +153,7 @@ class ObstetricsController extends AppController
         $this->set(compact('obstetric', 'patients'));
         $this->set('_serialize', ['obstetric']);
     }
+   
 
     /**
      * Delete method

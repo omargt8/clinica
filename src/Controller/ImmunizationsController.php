@@ -67,6 +67,19 @@ class ImmunizationsController extends AppController
     {
         $immunization = $this->Immunizations->newEntity();
 
+        $immunizations = $this->Immunizations;
+
+        $query = $immunizations->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         //Para obtener el id que se esta mandando al momento de guardar
         $patient = $this->Immunizations->Patients->get($id);
         //Para guardar el id del paciente como llave foranea en esta tabla
@@ -74,10 +87,48 @@ class ImmunizationsController extends AppController
 
         if ($this->request->is('post')) {
             $immunization = $this->Immunizations->patchEntity($immunization, $this->request->getData());
+            if($immunization->vaccines == true)
+            {
+                $immunization->pending = '--------';
+            }
+            if($immunization->planning == false)
+            {
+                $immunization->injectionprotocol = '--------';
+            }
             if ($this->Immunizations->save($immunization)) {
                 $this->Flash->success('El apartado de inmunizaciones ha sido llenado exitosamente!');
 
                 return $this->redirect(['controller' => 'Inheritances', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('No se pudo guardar la immunizacion, por favor intente de nuevo');
+        }
+        
+        $this->set(compact('immunization', 'patients', 'search'));
+        $this->set('_serialize', ['immunization']);
+    }
+    public function add2($id)
+    {
+        $immunization = $this->Immunizations->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Immunizations->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $immunization->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $immunization = $this->Immunizations->patchEntity($immunization, $this->request->getData());
+            if($immunization->vaccines == true)
+            {
+                $immunization->pending = '--------';
+            }
+            if($immunization->planning == false)
+            {
+                $immunization->injectionprotocol = '--------';
+            }
+            if ($this->Immunizations->save($immunization)) {
+                $this->Flash->success('El apartado de inmunizaciones ha sido llenado exitosamente!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('No se pudo guardar la immunizacion, por favor intente de nuevo');
         }
@@ -100,6 +151,14 @@ class ImmunizationsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $immunization = $this->Immunizations->patchEntity($immunization, $this->request->getData());
+            if($immunization->vaccines == true)
+            {
+                $immunization->pending = '--------';
+            }
+            if($immunization->planning == false)
+            {
+                $immunization->injectionprotocol = '--------';
+            }
             if ($this->Immunizations->save($immunization)) {
                 $this->Flash->success('Los datos han sido modificados');
 
@@ -111,7 +170,7 @@ class ImmunizationsController extends AppController
         $this->set(compact('immunization', 'patients'));
         $this->set('_serialize', ['immunization']);
     }
-
+   
     /**
      * Delete method
      *

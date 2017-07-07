@@ -67,6 +67,19 @@ class PathologicalsController extends AppController
     {
         $pathological = $this->Pathologicals->newEntity();
 
+        $pathologicals = $this->Pathologicals;
+
+        $query = $pathologicals->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         //Para obtener el id que se esta mandando al momento de guardar
         $patient = $this->Pathologicals->Patients->get($id);
         //Para guardar el id del paciente como llave foranea en esta tabla
@@ -74,10 +87,48 @@ class PathologicalsController extends AppController
 
         if ($this->request->is('post')) {
             $pathological = $this->Pathologicals->patchEntity($pathological, $this->request->getData());
+            if($pathological->surgicalinterven == false)
+            {
+               $pathological->typeintervention = '--------';
+            }
+            if($pathological->venerealdiseases == false)
+            {
+                $pathological->typevenereal = '-------';
+            }
             if ($this->Pathologicals->save($pathological)) {
                 $this->Flash->success('Los datos han sido guardados!');
 
                 return $this->redirect(['controller' => 'Addictions', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('No se pudo guardar, por favor intente de nuevo');
+        }
+        $zoonosis = $this->Pathologicals->Zoonosis->find('list', ['limit' => 200]);
+        $this->set(compact('pathological', 'patients', 'zoonosis', 'search'));
+        $this->set('_serialize', ['pathological']);
+    }
+    public function add2($id)
+    {
+        $pathological = $this->Pathologicals->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Pathologicals->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $pathological->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $pathological = $this->Pathologicals->patchEntity($pathological, $this->request->getData());
+            if($pathological->surgicalinterven == false)
+            {
+               $pathological->typeintervention = '--------';
+            }
+            if($pathological->venerealdiseases == false)
+            {
+                $pathological->typevenereal = '-------';
+            }
+            if ($this->Pathologicals->save($pathological)) {
+                $this->Flash->success('Los datos han sido guardados!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('No se pudo guardar, por favor intente de nuevo');
         }
@@ -102,6 +153,14 @@ class PathologicalsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $pathological = $this->Pathologicals->patchEntity($pathological, $this->request->getData());
+            if($pathological->surgicalinterven == false)
+            {
+               $pathological->typeintervention = '--------';
+            }
+            if($pathological->venerealdiseases == false)
+            {
+                $pathological->typevenereal = '-------';
+            }
             if ($this->Pathologicals->save($pathological)) {
                 $this->Flash->success('Los datos han sido modificados');
 
@@ -114,6 +173,7 @@ class PathologicalsController extends AppController
         $this->set(compact('pathological', 'patients', 'zoonosis'));
         $this->set('_serialize', ['pathological']);
     }
+   
 
     /**
      * Delete method

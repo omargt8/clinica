@@ -34,8 +34,8 @@
                 <td>------------</td>
                 <td>------------</td>
                 <?php endif; ?>
-                <td><?= h($patient->faculty) ?></td>
-                <td><?= h($patient->career) ?></td>
+                <td><?= h($patient->faculty->name) ?></td>
+                <td><?= h($patient->career->name) ?></td>
                 <td><?= h($patient->age) ?></td>
                 <td><?= h($patient->income) ?></td>
                 <td>

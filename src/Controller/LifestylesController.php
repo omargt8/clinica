@@ -68,6 +68,19 @@ class LifestylesController extends AppController
     {
         $lifestyle = $this->Lifestyles->newEntity();
 
+        $lifestyles = $this->Lifestyles;
+
+        $query = $lifestyles->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         //Para obtener el id que se esta mandando al momento de guardar
         $patient = $this->Lifestyles->Patients->get($id);
         //Para guardar el id del paciente como llave foranea en esta tabla
@@ -75,10 +88,41 @@ class LifestylesController extends AppController
 
         if ($this->request->is('post')) {
             $lifestyle = $this->Lifestyles->patchEntity($lifestyle, $this->request->getData());
+            if($lifestyle->sport == false)
+            {
+                $lifestyle->type = '--------';
+                $lifestyle->frequency = '--------';
+            }
             if ($this->Lifestyles->save($lifestyle)) {
                 $this->Flash->success('El apartado de estilo de vidas ha sido creado');
 
                 return $this->redirect(['controller' => 'Nonpathologicals', 'action' => 'add', $patient->id]);
+            }
+            $this->Flash->error('No se pudo guardar el apartado estilo de vidas, por favor intente nuevamente');
+        }
+        $this->set(compact('lifestyle', 'patients', 'search'));
+        $this->set('_serialize', ['lifestyle']);
+    }
+    public function add2($id)
+    {
+        $lifestyle = $this->Lifestyles->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Lifestyles->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $lifestyle->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+            $lifestyle = $this->Lifestyles->patchEntity($lifestyle, $this->request->getData());
+            if($lifestyle->sport == false)
+            {
+                $lifestyle->type = '--------';
+                $lifestyle->frequency = '--------';
+            }
+            if ($this->Lifestyles->save($lifestyle)) {
+                $this->Flash->success('El apartado de estilo de vidas ha sido creado');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $patient->id]);
             }
             $this->Flash->error('No se pudo guardar el apartado estilo de vidas, por favor intente nuevamente');
         }
@@ -101,6 +145,11 @@ class LifestylesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $lifestyle = $this->Lifestyles->patchEntity($lifestyle, $this->request->getData());
+            if($lifestyle->sport == false)
+            {
+                $lifestyle->type = '--------';
+                $lifestyle->frequency = '--------';
+            }
             if ($this->Lifestyles->save($lifestyle)) {
                 $this->Flash->success('Los datos han sido modificados');
 
@@ -112,6 +161,7 @@ class LifestylesController extends AppController
         $this->set(compact('lifestyle', 'patients'));
         $this->set('_serialize', ['lifestyle']);
     }
+   
 
     /**
      * Delete method

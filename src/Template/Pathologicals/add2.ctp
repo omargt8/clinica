@@ -1,4 +1,5 @@
- 
+<?= $this->Html->script(['hideinput', 'hideinput2']) ?>  
+<?= $this->Html->css('check') ?>
 <div class = "row">
     <div class = "col-md-6 col-md-offset-3">
         <?= $this->Flash->render() ?>
@@ -39,19 +40,25 @@
                 <div class="col-md-6">
                     <fieldset>
                        <?php
-                             echo $this->Form->input('surgicalinterven', ['label' => 'Intervenciones quirúrgicas']);
+                             echo $this->Form->input('surgicalinterven', ['label' => 'Intervenciones quirúrgicas',
+                             'onchange' => 'javascript:showContent()', 'id' => 'active']);
                         ?>
+                        <div id="content" style="display: none;">
                                 <label for="typeintervention">Tipo de intervención</label>
                             <?php   
                                 echo $this->Form->textarea('typeintervention', ['rows' => '3']);
                             ?>
+                        </div>
                          <?php
-                            echo $this->Form->input('venerealdiseases', ['label' => 'Enfermedades venereas']);
+                            echo $this->Form->input('venerealdiseases', ['label' => 'Enfermedades venereas',
+                             'onchange' => 'javascript:showContent2()', 'id' => 'active2']);
                         ?>
 
+                        <div id="content2" style="display: none;">
                         <?php   
                                 echo $this->Form->input('typevenereal', ['label' => 'Tipo de enfermedad venerea']);
                         ?>
+                        </div>
                         <?php
                         
                             echo $this->Form->input('tuberculosis', ['label' => 'Tuberculosis']);

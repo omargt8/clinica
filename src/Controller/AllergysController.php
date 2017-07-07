@@ -57,6 +57,19 @@ class AllergysController extends AppController
     {
         $allergy = $this->Allergys->newEntity();
 
+        $allergys = $this->Allergys;
+
+        $query = $allergys->find()
+            ->where(['patient_id =' => $id]);
+        $query->select(['count' => $query->func()->count('*')]);   
+        foreach ($query as $search)
+        {
+        }
+        if($search->count == 1)
+        {
+            $this->Flash->error('Estos datos ya existen, si quieres editarlos ve al listado de pacientes');
+        }
+
         //Para obtener el id que se esta mandando al momento de guardar
         $patient = $this->Allergys->Patients->get($id);
         //Para guardar el id del paciente como llave foranea en esta tabla
@@ -70,6 +83,30 @@ class AllergysController extends AppController
                 $this->Flash->success('El apartado de alergias ha sido llenado exitosamente!');
 
                 return $this->redirect(['controller' => 'Eathabits', 'action' => 'add', $allergy->patient_id ]);
+            }
+            $this->Flash->error('No se pudo crear el apartado de alergias, por favor intente nuevamente');
+        }
+        $this->set(compact('allergy', 'patients', 'search'));
+        $this->set('_serialize', ['allergy']);
+    }
+
+    public function add2($id)
+    {
+        $allergy = $this->Allergys->newEntity();
+
+        //Para obtener el id que se esta mandando al momento de guardar
+        $patient = $this->Allergys->Patients->get($id);
+        //Para guardar el id del paciente como llave foranea en esta tabla
+        $allergy->patient_id = $patient->id;
+
+        if ($this->request->is('post')) {
+
+            $allergy = $this->Allergys->patchEntity($allergy, $this->request->getData());
+
+            if ($this->Allergys->save($allergy)) {
+                $this->Flash->success('El apartado de alergias ha sido llenado exitosamente!');
+
+                return $this->redirect(['controller' => 'Patients', 'action' => 'preview', $allergy->patient_id ]);
             }
             $this->Flash->error('No se pudo crear el apartado de alergias, por favor intente nuevamente');
         }
@@ -101,6 +138,7 @@ class AllergysController extends AppController
         $this->set(compact('allergy', 'patients'));
         $this->set('_serialize', ['allergy']);
     }
+   
 
     /**
      * Delete method

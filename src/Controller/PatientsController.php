@@ -58,7 +58,9 @@ class PatientsController extends AppController
 
     public function index()
     {
-        $patients = $this->paginate($this->Patients);
+        $patients = $this->paginate($this->Patients,[
+            'contain' => ['Faculties', 'Careers']
+        ]);
         $this->set('patients', $patients);
     }
 
@@ -127,6 +129,7 @@ class PatientsController extends AppController
     public function add()
     {
         $patient = $this->Patients->newEntity();
+
         if($this->request->is('post'))
         {
             $patient = $this->Patients->patchEntity($patient, $this->request->data);
@@ -182,8 +185,8 @@ class PatientsController extends AppController
                 $this->Flash->error('El paciente no pudo ser modificado');
             }
         }
-
-        $this->set(compact('patient'));
+        $faculties = $this->Patients->Faculties->find('list', ['limit' => 200]);
+        $this->set(compact('patient', 'faculties'));
     }
 
      public function delete($id =null)
@@ -204,7 +207,9 @@ class PatientsController extends AppController
 
     public function preview($id)
     {
-        $patient = $this->Patients->get($id);
+        $patient = $this->Patients->get($id, [
+            'contain' => ['Careers', 'Faculties']
+        ]);
 
         //Alergias
         $allergy = $this->Patients->Allergys->find('all')->where(['patient_id' => $id])->first();
@@ -241,6 +246,24 @@ class PatientsController extends AppController
         $this->set('addiction', $addiction);
         $this->set('pstres', $pstres);
         $this->set('symptom', $symptom);
+
+          $this->viewBuilder()->options([
+            'pdfConfig' => [
+                'orientation' => 'portrait',
+                'filename' => 'Paciente_' . $patient->first_name . '.pdf',
+                'margin' => [
+                    'bottom' => 10,
+                    'left' => 5,
+                    'right' => 5,
+                    'top' => 10
+        ],
+         'options' => [
+            'print-media-type' => false,
+            'outline' => true,
+            'dpi' => 96
+        ]
+            ]
+        ]);
     }
 
     
