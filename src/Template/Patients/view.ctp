@@ -44,18 +44,16 @@
             </dd>
             <br>
 
-             <dt>Facultad:</dt>
+            <dt>Facultad:</dt>
             <dd>
-                <?= $patient->has('faculty') ? $this->Html->link($patient->faculty->name,
-                     ['controller' => 'Careers', 'action' => 'view', $patient->faculty->id]) : '' ?>
+                <?= $patient->faculty->name ?>
                     &nbsp;
             </dd>
             <br>
 
             <dt>Carrera:</dt>
             <dd>
-                <?= $patient->has('career') ? $this->Html->link($patient->career->name,
-                     ['controller' => 'Careers', 'action' => 'view', $patient->career->id]) : '' ?>
+                <?= $patient->career->name ?>
                     &nbsp;
             </dd>
             <br>

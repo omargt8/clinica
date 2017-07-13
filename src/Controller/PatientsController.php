@@ -11,24 +11,32 @@ use Cake\ORM\Query;
  */
 class PatientsController extends AppController
 {
+
     public function procphp()
     {
         $q=$_POST['q'];
         $con=$this->conexion();
-        $res=mysql_query("select * from careers where faculty_id=".$q."",$con);
+        //Arreglando que cuando se seleccione "(Seleccione)" no de error
+        if($q > 0)
+        {
+            $res=mysql_query("select * from careers where hid = 1 and faculty_id=".$q."",$con);
         ?>
-        <label>* Carrera</label>
-        <select id="career" name="career_id" class="form-control" required>
-        <option value="">(Seleccione)</option>
-        <?php while($fila=mysql_fetch_array($res)){ ?>
-        <option value="<?php echo $fila['id']; ?>"><?php echo $fila['name']; ?></option>
-        <?php } ?>
-        </select>
-        </br>
+            <label>* Carrera</label>
+            <select id="career" name="career_id" class="form-control" required>
+            <option value="">(Seleccione)</option>
+            <?php while($fila=mysql_fetch_array($res))
+            { ?>
+                <option value="<?php echo $fila['id']; ?>"><?php echo $fila['name']; ?></option>
+                <?php 
+            } ?>
+            </select>
+            </br>
         <?php
+        }
 
         $this->autoRender = false;
     }
+
 
     public function conexion()
     {
@@ -143,12 +151,9 @@ class PatientsController extends AppController
             {
                 $this->Flash->error('El paciente no pudo ser creado');
             }
-
-            
-            
         }
 
-        $faculties = $this->Patients->Faculties->find('list', ['limit' => 200]);
+        $faculties = $this->Patients->Faculties->find('list', ['limit' => 200])->where(['faculties.hid' => true]);
         $this->set(compact('patient', 'faculties'));
     }   
 
@@ -189,7 +194,7 @@ class PatientsController extends AppController
         $this->set(compact('patient', 'faculties'));
     }
 
-     public function delete($id =null)
+    public function delete($id =null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $patient = $this->Patients->get($id);
@@ -226,7 +231,9 @@ class PatientsController extends AppController
         //Datos obstetricos
         $obstetric = $this->Patients->Obstetrics->find('all')->where(['patient_id' => $id])->first();
         //Datos patológicos
-        $pathological = $this->Patients->Pathologicals->find('all')->where(['patient_id' => $id])->first();
+        $pathological = $this->Patients->Pathologicals->find('all', array('contain' => 'Zoonosis'))->where(['patient_id' => $id])->first();
+        //Datos patológicos si no hay zooonosis
+        $pat = $this->Patients->Pathologicals->find('all')->where(['patient_id' => $id])->first();
         //Adicciones
         $addiction = $this->Patients->Addictions->find('all')->where(['patient_id' => $id])->first();
         //Presencia de stress
@@ -243,6 +250,7 @@ class PatientsController extends AppController
         $this->set('nonpathological', $nonpathological);
         $this->set('obstetric', $obstetric);
         $this->set('pathological', $pathological);
+        $this->set('pat', $pat);
         $this->set('addiction', $addiction);
         $this->set('pstres', $pstres);
         $this->set('symptom', $symptom);

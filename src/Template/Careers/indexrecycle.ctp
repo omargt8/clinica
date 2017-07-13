@@ -2,7 +2,9 @@
     <div class="col-md-12">
         <div class="page-header">
             <?= $this->Flash->render() ?>
-            <h2>Lista de Carreras</h2>
+            <h2>Lista de Carreras Borradas</h2>
+            <?= $this->Html->link('Facultades', ['controller' => 'Faculties', 'action' => 'indexrecycle'], ['class' => 'btn btn-sm btn-info']) ?>
+            <?= $this->Html->link('Carreras', ['action' => 'indexrecycle'], ['class' => 'btn btn-sm btn-info disabled', 'disabled']) ?>
         </div>
 
         <div class="table-responsive">
@@ -25,9 +27,7 @@
                     <?= $career->faculty->name ?>
                 </td>
                 <td>
-                    <?= $this->Html->link('Editar', ['action' => 'edit', $career->id], ['class' => 'btn btn-sm btn-default']) ?>
-                    <?= $this->Form->postLink('Borrar', ['action' => 'trash', $career->id], ['confirm' =>
-                    'Eliminar Carrera?', 'class' => 'btn btn-sm btn-danger']) ?>
+                    <?= $this->Html->link('Restaurar', ['action' => 'untrash', $career->id], ['class' => 'btn btn-block btn-default']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

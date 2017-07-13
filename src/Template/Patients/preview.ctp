@@ -178,6 +178,14 @@
                     </figcaption>
 				</figure>
 			</a>
+			<?php elseif($pat): ?>
+			<a href="#!" class="flex-item">
+				<figure class="i9">
+					<figcaption>
+                        <?= $this->Html->link('Datos Patologicos', ['controller' => 'Pathologicals', 'action' => 'viewzoo', $pat->id]) ?>
+                    </figcaption>
+				</figure>
+			</a>
 			<?php else: ?>
 			<a href="#!" class="flex-item">
 				<figure class="i9">

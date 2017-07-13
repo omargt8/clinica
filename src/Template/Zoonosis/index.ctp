@@ -29,7 +29,7 @@
                     <?= $this->Html->link('Ver', ['action' => 'view', $zoonosi->id], ['class' => 'btn btn-sm btn-info']) ?>
                     <?= $this->Html->link('Editar', ['action' => 'edit', $zoonosi->id], ['class' => 'btn btn-sm btn-default']) ?>
                     <?= $this->Form->postLink('Borrar', ['action' => 'delete', $zoonosi->id], ['confirm' =>
-                    'Eliminar Usuario?', 'class' => 'btn btn-sm btn-danger']) ?>
+                    'Eliminar Zoonosis?', 'class' => 'btn btn-sm btn-danger']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

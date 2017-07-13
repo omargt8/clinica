@@ -49,19 +49,20 @@ class PatientsTable extends Table
         $this->setTable('patients');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        
 
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Faculties', [
             'foreignKey' => 'faculty_id',
-            'setDependent' => 'false',
             'joinType' => 'INNER'
         ]);
+
         $this->belongsTo('Careers', [
             'foreignKey' => 'career_id',
-            'setDependent' => 'false',
             'joinType' => 'INNER'
         ]);
+
         $this->hasMany('Addictions', [
             'foreignKey' => 'patient_id'
         ])

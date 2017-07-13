@@ -58,6 +58,17 @@ class PathologicalsController extends AppController
         $this->set('_serialize', ['pathological']);
     }
 
+    public function viewzoo($id = null)
+    {
+
+        $pat = $this->Pathologicals->get($id, [
+            'contain' => ['Patients']
+        ]);
+
+        $this->set('pat', $pat);
+        $this->set('_serialize', ['pat']);
+    }
+
     /**
      * Add method
      *

@@ -2,9 +2,9 @@
     <div class="col-md-12">
         <div class="page-header">
             <?= $this->Flash->render() ?>
-            <h2>Lista de Facultades</h2>
-             <?= $this->Html->link('Nueva Facultad', ['action' => 'add'], ['class' => 'btn btn-sm btn-info']) ?>
-                    <?= $this->Html->link('Ver Carreras', ['controller' => 'Careers','action' => 'index'], ['class' => 'btn btn-sm btn-info']) ?>
+            <h2>Lista de Facultades Borradas</h2>
+            <?= $this->Html->link('Facultades', ['action' => 'add'], ['class' => 'btn btn-sm btn-info disabled', 'disabled']) ?>
+            <?= $this->Html->link('Carreras', ['controller' => 'Careers','action' => 'indexrecycle'], ['class' => 'btn btn-sm btn-info']) ?>
         </div>
 
         <div class="table-responsive">
@@ -23,11 +23,7 @@
             <tr>
                 <td><?= h($faculty->name) ?></td>
                 <td>
-                    <?= $this->Html->link('Agregar Carrera', ['controller' => 'Careers', 'action' => 'add', $faculty->id], ['class' => 'btn btn-sm btn-success']) ?>
-                    <?= $this->Html->link('Ver Carreras', ['controller' => 'Careers','action' => 'preview', $faculty->id], ['class' => 'btn btn-sm btn-success']) ?>
-                    <?= $this->Html->link('Editar', ['action' => 'edit', $faculty->id], ['class' => 'btn btn-sm btn-default']) ?>
-                    <?= $this->Form->postLink('Borrar', ['action' => 'trash', $faculty->id], ['confirm' =>
-                    'Eliminar Facultad?', 'class' => 'btn btn-sm btn-danger']) ?>
+                    <?= $this->Html->link('Restautar', ['action' => 'untrash', $faculty->id], ['class' => 'btn btn-block btn-default']) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

@@ -122,5 +122,8 @@ a.animated-button.victoria-four:hover:after {
     <div class="col-md-3 col-sm-3 col-xs-6">
         <?= $this->Html->link('Zoonosis', ['controller' => 'Zoonosis', 'action' => 'index'], ['class' => 'btn btn-sm animated-button victoria-four']) ?>
     </div>
+    <div class="col-md-3 col-sm-3 col-xs-6">
+        <?= $this->Html->link('Elementos Eliminados', ['controller' => 'Faculties', 'action' => 'indexrecycle'], ['class' => 'btn btn-sm animated-button victoria-four']) ?>
+    </div>
   </div>
 </div>

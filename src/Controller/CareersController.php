@@ -16,11 +16,20 @@ class CareersController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
+     
     public function index()
     {
-        $careers = $this->paginate($this->Careers,[
-            'contain' => ['Faculties']
-        ]);
+        $careers = $this->Careers->find('all')->where(['careers.hid' => true]);
+        $this->set('careers', $this->paginate($careers, array('contain' => 'Faculties')));
+
+        $this->set(compact('careers'));
+        $this->set('_serialize', ['careers']);
+    }
+     
+    public function indexrecycle()
+    {
+        $careers = $this->Careers->find('all')->where(['careers.hid' => false]);
+        $this->set('careers', $this->paginate($careers, array('contain' => 'Faculties')));
 
         $this->set(compact('careers'));
         $this->set('_serialize', ['careers']);
@@ -55,6 +64,7 @@ class CareersController extends AppController
         $faculty = $this->Careers->Faculties->get($id);
         //Para guardar el id de la facultad como llave foranea en esta tabla
         $career->faculty_id = $faculty->id;
+        $career->hid = true;
 
 
         if ($this->request->is('post')) {
@@ -117,11 +127,61 @@ class CareersController extends AppController
 
     public function preview($id)
     {
-        $careers = $this->Careers->find('all', array('contain' => 'Faculties'))->where(['faculty_id' => $id]);
-         foreach ($careers as $fac)
+        $careers = $this->Careers->find('all', array('contain' => 'Faculties'))
+        ->where(['faculty_id' => $id])
+        ->where(['careers.hid' =>  true]);
+        foreach ($careers as $fac)
         {
         }
 
         $this->set(compact('careers', 'careers', 'fac'));
+    }
+
+
+    //Falso eliminar
+    public function trash($id = null)
+    {
+        $career = $this->Careers->get($id);
+        if($this->Careers->save($career))
+        {
+            $query = $this->Careers->query();
+                $query->update()
+                ->set(['careers.hid' => false])
+                ->where(['id' => $id])
+                ->execute();
+            $this->Flash->success('La Carrera ha sido borrada');
+        }
+        else
+        {
+            $this->Flash->error('Intente de nuevo por favor');
+        }
+        return $this->redirect(['action' => 'index']);
+    }
+
+    //Falso eliminar
+    public function untrash($id = null)
+    {
+        $career = $this->Careers->get($id);
+        $faculty_id = $career->faculty_id;
+
+        if($this->Careers->save($career))
+        {
+            $query = $this->Careers->query();
+                $query->update()
+                ->set(['careers.hid' => true])
+                ->where(['id' => $id])
+                ->execute();
+            $query = $this->Careers->Faculties->query();
+                $query->update()
+                ->set(['hid' => true])
+                ->where(['id' => $faculty_id])
+                ->execute();
+            $this->Flash->success('La Carrera ha sido restaurada');
+        }
+        else
+        {
+            $this->Flash->error('Intente de nuevo por favor');
+        }
+        return $this->redirect(['action' => 'indexrecycle']);
     }
 }

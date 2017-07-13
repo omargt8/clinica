@@ -40,7 +40,7 @@ class FacultiesTable extends Table
         $this->hasMany('Careers', [
             'foreignKey' => 'faculty_id'
         ])
-        ->setDependent(true);
+        ->setDependent(false);
         
         $this->hasMany('Patients', [
             'foreignKey' => 'faculty_id'

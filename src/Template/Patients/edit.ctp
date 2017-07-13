@@ -374,8 +374,8 @@ function cargarSelect2(valor)
     <div class = "col-md-6 col-md-offset-3">
         <?= $this->Flash->render() ?>
                 <div class = "page-header">
-                    <h2>Editar Paciente</2>
-                </div>
+                    <h2>Editar Paciente</h2>
+                 </div>
     </div>
 
         <div class = "col-md-12">

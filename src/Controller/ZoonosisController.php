@@ -54,7 +54,7 @@ class ZoonosisController extends AppController
             if ($this->Zoonosis->save($zoonosi)) {
                 $this->Flash->success('La nueva Zoonosis ha sido guardada');
 
-                return $this->redirect(['controller' => 'Patients', 'action' => 'index']);
+                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error('Intente de nuevo por favor!');
         }
@@ -77,11 +77,11 @@ class ZoonosisController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $zoonosi = $this->Zoonosis->patchEntity($zoonosi, $this->request->getData());
             if ($this->Zoonosis->save($zoonosi)) {
-                $this->Flash->success(__('The zoonosi has been saved.'));
+                $this->Flash->success('La Zoonosis ha sido modificada');
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The zoonosi could not be saved. Please, try again.'));
+            $this->Flash->error('Intente de nuevo por favor');
         }
         $this->set(compact('zoonosi'));
         $this->set('_serialize', ['zoonosi']);
@@ -99,9 +99,9 @@ class ZoonosisController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $zoonosi = $this->Zoonosis->get($id);
         if ($this->Zoonosis->delete($zoonosi)) {
-            $this->Flash->success(__('The zoonosi has been deleted.'));
+            $this->Flash->success('La zoonosis ha sido eliminada');
         } else {
-            $this->Flash->error(__('The zoonosi could not be deleted. Please, try again.'));
+            $this->Flash->error('Por favor intente de nuevo');
         }
 
         return $this->redirect(['action' => 'index']);

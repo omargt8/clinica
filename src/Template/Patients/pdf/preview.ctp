@@ -413,8 +413,8 @@
             </tr>
             <tr>
 			<td>Tipo de Zoonosis</td>
-			<td><?= $pathological->has('zoonosi') ? $this->Html->link($pathological->zoonosi->name,
-                     ['controller' => 'Zoonosis', 'action' => 'view', $pathological->zoonosi->id]) : '' ?></td>
+			<td><?= $pathological->zoonosi->name ?>
+            </td>
             </tr>
             <tr>
 			<td>Riesgo de enfermedades</td>

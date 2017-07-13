@@ -16,9 +16,26 @@ class FacultiesController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
+    public $paginate = [
+    // Other keys here.
+    'maxLimit' => 15
+    ];
+    
     public function index()
     {
-        $faculties = $this->paginate($this->Faculties);
+        $faculties = $this->Faculties->find('all')->where(['hid' => true]);
+        $this->set('faculties', $this->paginate($faculties));
+        
+
+        $this->set(compact('faculties', 'faculty'));
+        $this->set('_serialize', ['faculties']);
+    }
+    
+    public function indexrecycle()
+    {
+        $faculties = $this->Faculties->find('all')->where(['hid' => false]);
+        $this->set('faculties', $this->paginate($faculties));
+        
 
         $this->set(compact('faculties', 'faculty'));
         $this->set('_serialize', ['faculties']);
@@ -39,6 +56,7 @@ class FacultiesController extends AppController
     public function add()
     {
         $faculty = $this->Faculties->newEntity();
+        $faculty->hid = true;
         if ($this->request->is('post')) {
             $faculty = $this->Faculties->patchEntity($faculty, $this->request->getData());
             if ($this->Faculties->save($faculty)) {
@@ -96,4 +114,58 @@ class FacultiesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    //Falso eliminar
+    public function trash($id = null)
+    {
+        $faculty = $this->Faculties->get($id);
+        if($this->Faculties->save($faculty))
+        {
+            $query = $this->Faculties->query();
+                $query->update()
+                ->set(['hid' => false])
+                ->where(['id' => $id])
+                ->execute();
+
+            $query = $this->Faculties->Careers->query();
+                $query->update()
+                ->set(['hid' => false])
+                ->where(['faculty_id' => $id])
+                ->execute();
+                $this->Flash->success('La Facultad y sus carreras han sido borradas');
+            
+        }
+        else
+        {
+            $this->Flash->error('Intente de nuevo por favor');
+        }
+        return $this->redirect(['action' => 'index']);
+    }
+
+    //Restaurar
+    public function untrash($id = null)
+    {
+        $faculty = $this->Faculties->get($id);
+        if($this->Faculties->save($faculty))
+        {
+            $query = $this->Faculties->query();
+                $query->update()
+                ->set(['hid' => true])
+                ->where(['id' => $id])
+                ->execute();
+
+            $query = $this->Faculties->Careers->query();
+                $query->update()
+                ->set(['hid' => true])
+                ->where(['faculty_id' => $id])
+                ->execute();
+                $this->Flash->success('La Facultad y las carreras han sido restauradas');
+        }
+        else
+        {
+            $this->Flash->error('Intente de nuevo por favor');
+        }
+        return $this->redirect(['action' => 'indexrecycle']);
+    }
+
 }

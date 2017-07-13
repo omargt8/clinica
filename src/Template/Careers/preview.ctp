@@ -2,8 +2,13 @@
     <div class="col-md-12">
         <div class="page-header">
             <?= $this->Flash->render() ?>
-            <h2>Carreras Facultad de <?= $fac->faculty->name ?></h2>
+            <?php if(isset($fac['name'])): ?>
+                <h2>Carreras <?= $fac->faculty->name ?></h2>
+            <?php else: ?>
+                <h2>Esta facultad no tiene carreras aún</h2>
+            <?php endif; ?>
         </div>
+
 
         <div class="table-responsive">
 
@@ -11,8 +16,8 @@
 
             <thead>
             <tr>
-                <th> Nombre </th>
-                <th> Facultad </th>
+                <th>Nombre </th>
+                <th>Facultad </th>
                 <th>Acciones</th>
             </tr>
             </thead>
@@ -23,7 +28,7 @@
                 <td><?= $career->faculty->name ?></td>
                 <td>
                     <?= $this->Html->link('Editar', ['action' => 'edit', $career->id], ['class' => 'btn btn-sm btn-default']) ?>
-                    <?= $this->Form->postLink('Borrar', ['action' => 'delete', $career->id], ['confirm' =>
+                    <?= $this->Form->postLink('Borrar', ['action' => 'trash', $career->id], ['confirm' =>
                     'Eliminar Carrera?', 'class' => 'btn btn-sm btn-danger']) ?>
                 </td>
             </tr>
